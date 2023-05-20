@@ -7,3 +7,69 @@
 
   min-height: 100vh;
 }
+
+.main-container{
+  /* border: 1px solid gray; */
+  border-radius: 1rem;
+  padding: 1rem 2rem;
+  padding-bottom: 2rem;
+
+  box-shadow: 20px 20px 50px rgb(79, 102, 122);
+}
+
+.app-title{
+  color: rgb(1, 1, 199);
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.login-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  align-items: left;
+
+  background-color: rgba(94, 189, 245, 0.992);
+  padding: 1rem;
+  border-radius: .5rem;
+  /* padding-right: 1rem; */
+}
+
+.input-container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.input-container input{
+  border-radius: .5rem;
+  border: none;
+  padding: .15rem 1rem;
+}
+
+.input-container input:focus{
+  outline: none;
+
+
+}
+.login-btn{
+  width: 6rem;
+
+  border: none;
+  background-color: blue;
+  padding: .5rem 1rem;
+  border-radius: .6rem;
+
+  color: white;
+  font-weight: bold;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  transition: background-color .5s ease;
+  transition: width .25s ease-in;
+  margin-top: 1rem;
+}
+
+.login-btn:hover{
+  filter: brightness(1.9);
+  opacity: 2;
+  cursor: pointer;
+  width: 8rem;
+}
