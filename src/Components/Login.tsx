@@ -15,18 +15,25 @@ async function APIKeyValid(apikey: string, userVerification:any, apiKeyDefinitio
 
     let requestOptions: RequestInit = {
         method: 'GET',
-        headers: myHeaders
+        headers: {"x-rapidapi-key": apikey,"x-rapidapi-host": "v3.football.api-sports.io"}
     };
 
     // let valid = await fetch('./');
     let resultado:any = await fetch(url, requestOptions);
     resultado = await resultado.json();
-    console.log({resultado});
 
+    let limit_atingido:boolean;
+    
     if(resultado.results ==1){
-        setLoading(false);
-        apiKeyDefinition(apikey);
-        userVerification(true);
+        if(resultado.response.requests.current >resultado.response.requests.limit_day ){
+            setLoading(false);
+            alert('Essa chave API não possui mais capacidade de Acesso, Por favor verifique o seu limite de requisições.')
+            userVerification(false);
+        }else{
+            setLoading(false);
+            apiKeyDefinition(apikey);
+            userVerification(true);
+        }
     }else{
         setLoading(false);
         alert('chave API invalida');

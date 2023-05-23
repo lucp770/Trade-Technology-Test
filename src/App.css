@@ -6,9 +6,15 @@
   justify-content: center;
 
   min-height: 100vh;
+
+  background-image: url('./../public/fundo2.jpeg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 .main-container{
+  background-color: white;
   /* border: 1px solid gray; */
   border-radius: 1rem;
   padding: 1rem 2rem;
@@ -18,7 +24,7 @@
 }
 
 .app-title{
-  color: rgb(1, 1, 199);
+  color: rgb(4,194,149);
   font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
@@ -28,7 +34,7 @@
   justify-content: right;
   align-items: left;
 
-  background-color: rgba(94, 189, 245, 0.992);
+  background-color: rgb(80,215,220);
   padding: 1rem;
   border-radius: .5rem;
   /* padding-right: 1rem; */
@@ -51,11 +57,11 @@
 
 
 }
-.login-btn{
+.login-btn, .consultar-btn{
   width: 6rem;
 
   border: none;
-  background-color: blue;
+  background-color: rgb(4,194,149);
   padding: .5rem 1rem;
   border-radius: .6rem;
 
@@ -67,9 +73,69 @@
   margin-top: 1rem;
 }
 
-.login-btn:hover{
-  filter: brightness(1.9);
+.login-btn:hover, .consultar-btn:hover{
+  filter: brightness(1.1);
   opacity: 2;
   cursor: pointer;
-  width: 8rem;
+  /* width: 8rem; */
+}
+
+
+/* SELECTION PAGE */
+
+.selection-page-container{
+  background-color: white;
+  border-radius: 1rem;
+
+  padding: 1rem 2rem;
+  padding-bottom: 2rem;
+
+  box-shadow: 20px 20px 50px rgb(79, 102, 122);
+}
+
+.options-container{
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: space-around;
+
+  margin: 1rem 0;
+  margin-top: 0;
+
+}
+
+.consultar-btn-container{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+
+}
+
+.results-container{
+  width: 100%;
+  height: 20rem;
+  background-color: rgb(80,215,220,.3);
+}
+
+.select-container{
+/*  background-color: rgb(80,215,220);*/
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.select-container select{
+  background-color: rgb(80,215,220);
+  color:white;
+  border:none;
+  border-radius: .5rem;
+  margin: 0 .5rem;
+
+  padding: .5rem;
+  font-weight: bold;
+}
+
+.opcoes-de-constulta-form{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
 }
