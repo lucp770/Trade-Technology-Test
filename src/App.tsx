@@ -5,7 +5,7 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  const [userLogged, setUserLogged] = useState(false);//ao carregar a pagina o usuario não esta logado.
+  const [userLogged, setUserLogged] = useState(true);//ao carregar a pagina o usuario não esta logado.
   const [APIKey, setAPIKey] = useState('');
 
   // se userLogged, mostrar a tela de consulta, se não mostrar a tela de Login
@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App">
       {userLogged ? (
-        <SelectionPage apiKey = {APIKey} />
+        <SelectionPage apiKey = {APIKey} userVerification = {(value:boolean) => setUserLogged(value)} />
         ) : (<Login userVerification = {(value:boolean) => setUserLogged(value)} apiKeyDefinition ={(apiKey: string)=> setAPIKey(apiKey)}/>)}
     </div>);
 

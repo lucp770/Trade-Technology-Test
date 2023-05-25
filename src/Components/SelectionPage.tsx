@@ -1,9 +1,12 @@
 import React,{useEffect,useState, useRef} from 'react';
+import Jogador from './Jogador';
 
 
 function pesquisar(Pais:string, liga:string, time:string, opcao:string, temporada?:string){
+
     // switch case opcao{
     console.log('Pesquisar');
+
 }
 
 function SelectionPage(props:any){
@@ -11,6 +14,7 @@ function SelectionPage(props:any){
     const [Countries, setContries] = useState([]);
     const [Ligas, setLigas] = useState([]);
     const [Seasons, setSeasons] = useState([]);
+    const [times, setTimes] = useState([]);
 
     const [Country, setCountry] = useState('');
     const [Season, setSeason] = useState('nenhuma');
@@ -21,8 +25,7 @@ function SelectionPage(props:any){
     const timeRef = useRef();
     const opcaoDeConsulta = useRef();
 
-    
-    const {apiKey} = props;
+    const {apiKey,userVerification} = props;
     console.log({apiKey});
 
     const urlContries = 'https://v3.football.api-sports.io/countries';
@@ -36,65 +39,73 @@ function SelectionPage(props:any){
         headers: {"x-rapidapi-key": apiKey,"x-rapidapi-host": "v3.football.api-sports.io"}
         };
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        // const urlContries = 'https://v3.football.api-sports.io/countries';
-        // let requestOptions: RequestInit = {
-        //     method: 'GET',
-        //     headers: {"x-rapidapi-key": apiKey}
-        // };
-        console.log({requestOptions});
-        // Get the list of countries on the first renders.
-         // fetch the list of countries.
-         fetch(urlContries,requestOptions)
-         .then((countriesList:Response) => countriesList.json())
-         .then(jsonResponse => jsonResponse.response)
-         .then(responseArray =>{
-            setContries(responseArray)
-            let firstCountry:string = responseArray[0].name;
-            return fetch(`https://v3.football.api-sports.io/leagues?country=${firstCountry}`,requestOptions)
-        })
-        .then(resultado => resultado.json())
-        .then(resultadoJson => resultadoJson.response)
-        .then(arrayResultados => setLigas(arrayResultados))
-        .catch(e=> alert(`Erro ao acessar a API: ${e}`));
+    //     console.log({requestOptions});
 
-    },[])
+    //      // fetch the list of countries.
+    //      fetch(urlContries,requestOptions)
+    //      .then((countriesList:Response) => countriesList.json())
+    //      .then(jsonResponse => jsonResponse.response)
+    //      .then(responseArray =>{
+    //         setContries(responseArray)
+    //         let firstCountry:string = responseArray[0].name;
+    //         return fetch(`https://v3.football.api-sports.io/leagues?country=${firstCountry}`,requestOptions)
+    //     })
+    //     .then((resultado:Response) => resultado.json())
+    //     .then(resultadoJson => resultadoJson.response)
+    //     .then(arrayResultados => setLigas(arrayResultados))
+    //     .then(()=>{
+    //         // fetch the seasons.
+    //         return fetch('https://v3.football.api-sports.io/leagues/seasons', requestOptions)
+    //     })
+    //     .then(result => result.json())
+    //     .then(resultJson => {
+    //         console.log('seasons: ');
+    //         console.log({resultJson});
+    //         setSeasons(resultJson.response)})
+    //     .then(()=>{
+    //         // fetch the Teams
+    //         console.log('fetching teams...');
 
-    useEffect(()=>{
-        // let myHeaders = new Headers();
-        // myHeaders.append("x-rapidapi-key", apiKey);
-        // myHeaders.append("x-rapidapi-host", "v3.football.api-sports.io");
+    //     })
+    //     .catch(e=> {
+    //         alert(`Erro ao acessar a API: ${e}`)});
+    //         userVerification(false);
 
-        // const urlContries = 'https://v3.football.api-sports.io/countries';
+    // },[])
 
-        // let requestOptions: RequestInit = {
-        //     method: 'GET',
-        //     headers: {"x-rapidapi-key": apiKey,"x-rapidapi-host": "v3.football.api-sports.io"}
-        // };
-        // rerender the elment when a new country is selected.
-        console.log(`Pais selecionado : ${Country}`);
-        // tornar inativo os elementos que não foram selecionados.
+    // useEffect(()=>{
+       
+    //     fetch(`https://v3.football.api-sports.io/leagues?country=${Country}`,requestOptions)
+    //         .then(resultado=> resultado.json())
+    //         .then(resultadoJson => resultadoJson.response)
+    //         .then(arrayResultados => setLigas(arrayResultados))
+    //         .catch(e=> alert(`Erro ao acessar a API: ${e}`));
+    // },[Country]);
 
-        // consultar as ligas referentes àquele País.
-        fetch(`https://v3.football.api-sports.io/leagues?country=${Country}`,requestOptions)
-            .then(resultado=> resultado.json())
-            .then(resultadoJson => resultadoJson.response)
-            .then(arrayResultados => setLigas(arrayResultados))
-            .catch(e=> alert(`Erro ao acessar a API: ${e}`));
-    },[Country]);
-
-    useEffect(()=>{
-        // Se for escolhida uma season é preciso atualizar os resultados de ligas e times.
-        if(Season !== 'nenhuma'){
-            // consultar as ligas referentes àquele País e àquela temporada
-        fetch(`https://v3.football.api-sports.io/leagues?country=${Country}&season=${Season}`,requestOptions)
-            .then(resultado=> resultado.json())
-            .then(resultadoJson => resultadoJson.response)
-            .then(arrayResultados => setLigas(arrayResultados))
-            .catch(e=> alert(`Erro ao acessar a API: ${e}`));
-        }
-    },[Season]);
+    // useEffect(()=>{
+    //     // Se for escolhida uma season é preciso atualizar os resultados de ligas e times.
+    //     if(Season !== 'nenhuma'){
+    //         // consultar as ligas referentes àquele País e àquela temporada
+    //     fetch(`https://v3.football.api-sports.io/leagues?country=${Country}&season=${Season}`,requestOptions)
+    //         .then(resultado=> resultado.json())
+    //         .then(resultadoJson => resultadoJson.response)
+    //         .then(arrayResultados => {
+    //             console.log({arrayResultados});
+    //             setLigas(arrayResultados)})
+    //         .catch(e=> alert(`Erro ao acessar a API: ${e}`));
+            
+    //     }else{
+    //         fetch(`https://v3.football.api-sports.io/leagues?country=${Country}`,requestOptions)
+    //         .then(resultado=> resultado.json())
+    //         .then(resultadoJson => resultadoJson.response)
+    //         .then(arrayResultados => {
+    //             console.log({arrayResultados});
+    //             setLigas(arrayResultados)})
+    //         .catch(e=> alert(`Erro ao acessar a API: ${e}`));
+    //     }
+    // },[Season]);
 
 
     return(
@@ -113,7 +124,7 @@ function SelectionPage(props:any){
 
                     <div className="liga-container">
                         <span>Selecione a liga: </span>
-                        <select className='liga-select'>
+                        <select className='liga-select' onChange={(eventChange) => setLiga(eventChange.target.value)}>
                             {Ligas.map((liga:any)=>(<option key={Ligas.indexOf((liga as never))}>{liga.league.name}</option>))}
                         </select>
                     </div>
@@ -121,9 +132,9 @@ function SelectionPage(props:any){
                     <div className="temporada-container">
                          <span>Selecione uma temporada (Opicional): </span>
 
-                        <select className='season-select'>
+                        <select className='season-select' onChange={(eventChange) => setSeason(eventChange.target.value)}>
                             <option value='nenhuma'>Selecionar...</option>
-                            {Seasons.map((season:any)=>(<option key={Seasons.indexOf((season as never))}>{season}</option>))}
+                            {Seasons.map((season:any)=>(<option key={Seasons.indexOf((season as never))} value={season}>{season}</option>))}
                         </select>
                     </div>
 
@@ -170,6 +181,15 @@ function SelectionPage(props:any){
             </div>
 
             <div className="results-container">
+                <Jogador nome="Lucas" idade='26' nacionalidade='Brasileiro' />
+                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
+                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
+                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
+                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
+                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
+                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
+                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
+                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
             </div>
         </div>
     );

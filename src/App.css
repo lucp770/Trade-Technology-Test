@@ -1,3 +1,30 @@
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgb(0,0,0,10%); 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(8, 103, 187),; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 61, 227, 0.87); 
+}
+
+::-webkit-scrollbar-corner { 
+    background: rgba(0,0,0,0.1); 
+}
+
 .App {
   text-align: center;
 
@@ -116,6 +143,9 @@
   width: 100%;
   height: 20rem;
   background-color: rgb(80,215,220,.3);
+
+  padding-top: .2rem;
+  overflow: scroll;
 }
 
 .select-container{
@@ -138,4 +168,41 @@
 .opcoes-de-constulta-form{
   display: grid;
   grid-template-columns: repeat(2,1fr);
+}
+
+
+/* COMPONENTE JOGADOR */
+
+
+.jogador-container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background-image: linear-gradient(rgb(8, 103, 187), rgb(88, 165, 233));
+  
+  border-radius: .4rem;
+  margin: .5rem;
+  padding: .5rem 0;
+
+  color: white;
+  font-weight: bold;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.player-pic{
+  margin: 0 1rem;
+}
+
+.player-data{
+  width: 90%;
+}
+
+.player-data div{
+  width: 100%;
+
+  text-align: left;
+}
+.player-pic img{
+  width: 4rem;
 }
