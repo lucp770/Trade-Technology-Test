@@ -206,3 +206,11 @@
 .player-pic img{
   width: 4rem;
 }
+
+
+/* GRAFICO */
+
+.plot-container{
+  width: 100%;
+  height: 100%;
+}

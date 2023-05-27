@@ -1,15 +1,19 @@
 import React,{useEffect,useState, useRef} from 'react';
 import Jogador from './Jogador';
+import Grafico from './Grafico';
 
 
-function pesquisar(Pais:string, liga:string, time:string, opcao:string, temporada?:string){
 
-    // switch case opcao{
-    console.log('Pesquisar');
 
+function pesquisar(){
+    // set opcaoDeBusca based on the checked radio button and trigger the rerender of the result container.
+
+    return ;
 }
 
 function SelectionPage(props:any){
+
+    const [opcaoDeBusca, setOpcaoDeBusca] = useState('nenhuma');
 
     const [Countries, setContries] = useState([]);
     const [Ligas, setLigas] = useState([]);
@@ -21,6 +25,9 @@ function SelectionPage(props:any){
     const [Temporada, setTemporada] = useState('');
     const [Liga, setLiga] = useState('');
     const [time,setTime] = useState('');
+
+    const [Jogadores, setJogadores] = useState([{nome:'Lucas', idade:26, nacionalidade:'Brasileiro' }, {nome:'Vitor', idade: 20, nacionalidade:'Brasileiro'}]);
+
 
     const timeRef = useRef();
     const opcaoDeConsulta = useRef();
@@ -38,6 +45,25 @@ function SelectionPage(props:any){
         method: 'GET',
         headers: {"x-rapidapi-key": apiKey,"x-rapidapi-host": "v3.football.api-sports.io"}
         };
+        
+
+    function mostrarResultadoDaBusca(opcao:string,Pais?:string, liga?:string, time?:string , temporada?:string){
+
+    // switch case opcao{
+    console.log('Pesquisar');
+    // set busca
+
+    if(opcao == 'nenhuma'){
+        return (<p>Hello world</p>)
+    }else if(opcao=='jogadores'){
+        return(<div>
+            {Jogadores.map((jogador:any)=>(<Jogador nome={jogador.nome} idade={jogador.idade} nacionalidade={jogador.nacionalidade}/>))}
+            </div>
+            )
+    
+    }
+
+}
 
     // useEffect(()=>{
 
@@ -181,15 +207,7 @@ function SelectionPage(props:any){
             </div>
 
             <div className="results-container">
-                <Jogador nome="Lucas" idade='26' nacionalidade='Brasileiro' />
-                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
-                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
-                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
-                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
-                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
-                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
-                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
-                <Jogador nome="Vitor" idade='20' nacionalidade='Brasileiro' />
+                {mostrarResultadoDaBusca(opcaoDeBusca,Country, Liga, time)}
             </div>
         </div>
     );
