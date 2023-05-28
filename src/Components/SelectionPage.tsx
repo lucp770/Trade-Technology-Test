@@ -3,14 +3,6 @@ import Jogador from './Jogador';
 import Grafico from './Grafico';
 
 
-
-
-function pesquisar(){
-    // set opcaoDeBusca based on the checked radio button and trigger the rerender of the result container.
-
-    return ;
-}
-
 function SelectionPage(props:any){
 
     const [opcaoDeBusca, setOpcaoDeBusca] = useState('nenhuma');
@@ -20,11 +12,10 @@ function SelectionPage(props:any){
     const [Seasons, setSeasons] = useState([]);
     const [times, setTimes] = useState([]);
 
-    const [Country, setCountry] = useState('');
-    const [Season, setSeason] = useState('nenhuma');
-    const [Temporada, setTemporada] = useState('');
-    const [Liga, setLiga] = useState('');
-    const [time,setTime] = useState('');
+    const [Country, setCountry] = useState('none');
+    const [Season, setSeason] = useState('none');
+    const [Liga, setLiga] = useState('none');
+    const [time,setTime] = useState('none');
 
     const [Jogadores, setJogadores] = useState([{nome:'Lucas', idade:26, nacionalidade:'Brasileiro' }, {nome:'Vitor', idade: 20, nacionalidade:'Brasileiro'}]);
 
@@ -32,6 +23,20 @@ function SelectionPage(props:any){
     const timeRef = useRef();
     const opcaoDeConsulta = useRef();
 
+    // selects
+    const ligaSelect = useRef() as React.MutableRefObject<HTMLSelectElement>;
+    const seasonSelect = useRef() as React.MutableRefObject<HTMLSelectElement>;
+    const timeSelect = useRef() as React.MutableRefObject<HTMLSelectElement>;
+
+
+    // radio buttons
+    const radioJogadores = useRef() as React.MutableRefObject<HTMLInputElement>;
+    const radioResultado = useRef() as React.MutableRefObject<HTMLInputElement>;
+    const radioGolsMarcados = useRef() as React.MutableRefObject<HTMLInputElement>;
+    const radioFormacao = useRef() as React.MutableRefObject<HTMLInputElement>;
+
+
+    // Props
     const {apiKey,userVerification} = props;
     console.log({apiKey});
 
@@ -45,25 +50,130 @@ function SelectionPage(props:any){
         method: 'GET',
         headers: {"x-rapidapi-key": apiKey,"x-rapidapi-host": "v3.football.api-sports.io"}
         };
+
+    function checarOpcaoSelecionada(){
+        if(radioFormacao.current.checked){
+            alert('formacao');
+            // fetch com os dados selecionados
+            console.log({time,Country, Liga, Season});
+
+        }else if(radioJogadores.current.checked){
+            alert('Jogadores');
+        }else if(radioResultado.current.checked){
+            alert('Resultado');
+        }else if(radioGolsMarcados.current.checked){
+            alert('Gols Marcados')
+        }else{
+            alert('Por favor selecione uma opção de consulta');
+        }
+
+    }
         
 
-    function mostrarResultadoDaBusca(opcao:string,Pais?:string, liga?:string, time?:string , temporada?:string){
+    function mostrarResultadoDaBusca(opcao:string,Pais?:string, liga?:string, time?:string , temporada?:string):any {
+        // switch case opcao{
+        console.log('Pesquisar');
+        // set busca
 
-    // switch case opcao{
-    console.log('Pesquisar');
-    // set busca
-
-    if(opcao == 'nenhuma'){
-        return (<p>Hello world</p>)
-    }else if(opcao=='jogadores'){
-        return(<div>
-            {Jogadores.map((jogador:any)=>(<Jogador nome={jogador.nome} idade={jogador.idade} nacionalidade={jogador.nacionalidade}/>))}
-            </div>
-            )
+        if(opcao == 'nenhuma'){
+            return (<p>Hello world</p>)
+        }else if(opcao=='jogadores'){
+            return(<div>
+                {Jogadores.map((jogador:any)=>(<Jogador nome={jogador.nome} idade={jogador.idade} nacionalidade={jogador.nacionalidade}/>))}
+                </div>
+                )
+        
+        }
     
-    }
 
 }
+
+    // first render, fetch the list of countries and the available seasons
+
+    useEffect(()=>{
+        fetch(urlContries,requestOptions)
+         .then((countriesList:Response) => countriesList.json())
+         .then(jsonResponse => jsonResponse.response)
+         .then(responseArray => setContries(responseArray))
+         .then(()=>{
+            return fetch('https://v3.football.api-sports.io/leagues/seasons', requestOptions)
+         })
+         .then((response:Response)=> response.json())
+         .then(jsonResponse => setSeasons(jsonResponse.response))
+         .catch(e=>alert(e))
+    },[])
+
+
+    // rerender when country selected
+
+    useEffect(()=>{
+
+        if(Country !== 'none'){
+            // fetch the Leagues
+            fetch(`https://v3.football.api-sports.io/leagues?country=${Country}`,requestOptions)
+                .then((response:Response)=> response.json())
+                .then(jsonResponse=>setLigas(jsonResponse.response))
+                .then(()=>{
+                    // enable liga selection
+                    ligaSelect.current.disabled=false;
+
+                    if(ligaSelect.current.classList.contains('inactive')){
+                        ligaSelect.current.classList.remove('inactive');
+                    }
+                })
+        }else{
+            // disable liga selection
+            ligaSelect.current.disabled=true;
+            if(!ligaSelect.current.classList.contains('inactive')){
+                ligaSelect.current.classList.add('inactive');
+            }
+
+        }
+
+    },[Country])
+
+    // rerender if/when a season is selected
+    useEffect(()=>{
+        if(Season !== 'none'){
+            fetch(`https://v3.football.api-sports.io/leagues?country=${Country}&season=${Season}`,requestOptions)
+            .then(resultado=> resultado.json())
+            .then(resultadoJson => resultadoJson.response)
+            .then(arrayResultados => {
+                setLigas(arrayResultados)})
+            .catch(e=> alert(`Erro ao acessar a API: ${e}`));
+        }else{
+
+    }
+
+    }, [Season])
+
+    // rerender when Liga selected, and make time selection available
+    useEffect(()=>{
+        if(Liga !== 'none'){
+            // fetch the teams
+
+            let ligaId = Ligas.find((liga:any) => liga.league.name = Liga);
+            console.log({ligaId})
+
+
+            // make time SelectionPagetion available
+            timeSelect.current.disabled=false;
+
+            if(timeSelect.current.classList.contains('inactive')){
+                timeSelect.current.classList.remove('inactive');
+            }
+        }else{
+            // make time selection unavailable
+            timeSelect.current.disabled=true;
+            if(!timeSelect.current.classList.contains('inactive')){
+                timeSelect.current.classList.add('inactive');
+            }
+
+        }
+
+    },[Liga])
+
+    
 
     // useEffect(()=>{
 
@@ -97,7 +207,7 @@ function SelectionPage(props:any){
     //     })
     //     .catch(e=> {
     //         alert(`Erro ao acessar a API: ${e}`)});
-    //         userVerification(false);
+    //         // userVerification(false);
 
     // },[])
 
@@ -144,13 +254,15 @@ function SelectionPage(props:any){
                     <div className="pais-container">
                         <span>Selecione o País: </span>
                         <select className='country-select' onChange={(eventChange) => setCountry(eventChange.target.value)}>
+                             <option value='none'>Selecionar...</option>
                             {Countries.map((country:any)=>(<option key={Countries.indexOf((country as never))}>{country.name}</option>))}
                         </select>
                     </div>
 
                     <div className="liga-container">
                         <span>Selecione a liga: </span>
-                        <select className='liga-select' onChange={(eventChange) => setLiga(eventChange.target.value)}>
+                        <select className='liga-select inactive' ref={ligaSelect} onChange={(eventChange) => setLiga(eventChange.target.value)} disabled>
+                            <option value='none'>Selecionar...</option>
                             {Ligas.map((liga:any)=>(<option key={Ligas.indexOf((liga as never))}>{liga.league.name}</option>))}
                         </select>
                     </div>
@@ -158,15 +270,17 @@ function SelectionPage(props:any){
                     <div className="temporada-container">
                          <span>Selecione uma temporada (Opicional): </span>
 
-                        <select className='season-select' onChange={(eventChange) => setSeason(eventChange.target.value)}>
-                            <option value='nenhuma'>Selecionar...</option>
+                        <select className='season-select' ref={seasonSelect} onChange={(eventChange) => setSeason(eventChange.target.value)}>
+                            <option value='none'>Selecionar...</option>
                             {Seasons.map((season:any)=>(<option key={Seasons.indexOf((season as never))} value={season}>{season}</option>))}
                         </select>
                     </div>
 
                     <div className="temporada-container">
                         <span>Selecione o time: </span>
-                        <select className='country-select'></select>
+                        <select className='inactive time-select ' ref={timeSelect} disabled>
+                            <option value='none'>Selecionar...</option>
+                        </select>
                     </div>
 
                 </div>
@@ -176,24 +290,24 @@ function SelectionPage(props:any){
 
                     <form className="opcoes-de-constulta-form">
                         <div className='opcao-container'>
-                            <input name='opcao' type='radio' id='jogadores' value='jogadores'/>
+                            <input name='opcao' type='radio' id='jogadores' value='jogadores' ref ={radioJogadores} />
                             <label htmlFor='jogadores'>Jogadores</label>
                         </div>
 
                         <div className='opcao-container'>
-                            <input name='opcao' type='radio' id='formacao' value='formacao'/>
+                            <input name='opcao' type='radio' id='formacao' value='formacao' ref ={radioFormacao}/>
                             <label htmlFor='formacao'>Formação mais utilizada</label>
                         </div>
 
 
                         <div className='opcao-container'>
-                            <input name='opcao' type='radio' id='resultados'value='resultados'/>
+                            <input name='opcao' type='radio' id='resultados'value='resultados' ref ={radioResultado}/>
                             <label htmlFor='resultados'>Resultados</label>
                         </div>
 
 
                         <div className='opcao-container'>
-                            <input name='opcao' type='radio' id='gols' value='gols'/>
+                            <input name='opcao' type='radio' id='gols' value='gols' ref ={radioGolsMarcados}/>
                             <label htmlFor='gols'>Gols marcados por tempo de jogo</label>
                         </div>
 
@@ -201,7 +315,7 @@ function SelectionPage(props:any){
                 </div>
 
                 <div className="consultar-btn-container">
-                    <button className = "consultar-btn">Consultar</button>
+                    <button className = "consultar-btn" onClick ={()=>{checarOpcaoSelecionada()}}>Consultar</button>
                 </div>
 
             </div>
@@ -214,6 +328,3 @@ function SelectionPage(props:any){
 }
 
 export default SelectionPage;
-
-
-// mais infos: https://stackoverflow.com/questions/62624783/radio-ref-on-react
